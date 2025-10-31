@@ -1,0 +1,163 @@
+/* 🌅 Bandeau photo panoramique haut */
+.hero-section {
+  position: relative;
+  height: 320px; /* ✅ moins haut pour voir les attractions dessous */
+  background: 
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)),
+    url('https://images.unsplash.com/photo-1508261308462-1bddc072f9a0?auto=format&fit=crop&w=1600&q=80')
+    center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  overflow: hidden;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+}
+
+.hero-content {
+  z-index: 2;
+  max-width: 800px;
+  text-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+}
+
+/* ✨ Titre dans le bandeau */
+.hero-section h1 {
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.hero-section h1 span {
+  color: #ffc107;
+  text-shadow: 0 0 15px rgba(255, 193, 7, 0.9);
+}
+
+.hero-section p {
+  font-size: 1.1rem;
+  color: #f8f9fa;
+  margin-bottom: 1rem;
+}
+
+/* 🚀 Bouton dans le bandeau */
+.hero-section .btn-warning {
+  background: linear-gradient(90deg, #ffb703, #ff7300);
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  padding: 8px 25px;
+  font-weight: 600;
+  box-shadow: 0 3px 12px rgba(255, 140, 0, 0.6);
+  transition: all 0.3s ease-in-out;
+}
+
+.hero-section .btn-warning:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(90deg, #ffa600, #ff4500);
+  box-shadow: 0 6px 18px rgba(255, 100, 0, 0.8);
+}
+/* 🌆 Barre de navigation vitrée */
+.glass-nav {
+  background: rgba(10, 30, 80, 0.55);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  background-image: linear-gradient(90deg, rgba(10, 50, 120, 0.7), rgba(0, 100, 200, 0.6));
+  transition: all 0.3s ease-in-out;
+}
+.glass-nav:hover {
+  background: rgba(10, 40, 100, 0.8);
+}
+
+/* 🧭 Boutons bleus */
+.btn-nav {
+  color: #ffffff !important;
+  background-color: rgba(0, 123, 255, 0.25);
+  border: 2px solid rgba(0, 123, 255, 0.4);
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.25s ease-in-out;
+}
+.btn-nav:hover {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: #fff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(13, 110, 253, 0.5);
+}
+
+/* 🔴 Bouton Déconnexion (spécifique) */
+.btn-danger.btn-nav {
+  background-color: rgba(255, 0, 0, 0.2);
+  border-color: rgba(255, 50, 50, 0.6);
+}
+.btn-danger.btn-nav:hover {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #fff !important;
+  box-shadow: 0 0 10px rgba(220, 53, 69, 0.5);
+}
+
+/* 🌍 Logo titre */
+.glass-nav h3 {
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 🌅 Bandeau panoramique avec mer */
+.hero-section {
+  position: relative;
+  height: 320px;
+  background: 
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)),
+    url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80')
+    center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  overflow: hidden;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+}
+
+.hero-content {
+  z-index: 2;
+  max-width: 800px;
+  text-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+}
+
+.hero-section h1 {
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: #fff;
+}
+.hero-section h1 span {
+  color: #ffc107;
+  text-shadow: 0 0 15px rgba(255, 193, 7, 0.9);
+}
+.hero-section p {
+  font-size: 1.1rem;
+  color: #f8f9fa;
+  margin-bottom: 1rem;
+}
+
+/* 🚀 Bouton principal dans le bandeau */
+.hero-section .btn-warning {
+  background: linear-gradient(90deg, #ffb703, #ff7300);
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  padding: 8px 25px;
+  font-weight: 600;
+  box-shadow: 0 3px 12px rgba(255, 140, 0, 0.6);
+  transition: all 0.3s ease-in-out;
+}
+.hero-section .btn-warning:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(90deg, #ffa600, #ff4500);
+  box-shadow: 0 6px 18px rgba(255, 100, 0, 0.8);
+}

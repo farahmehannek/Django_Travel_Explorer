@@ -1,0 +1,83 @@
+{% extends "explorer/base.html" %}
+{% load static %}
+{% block title %}Accueil - {{ pays }}{% endblock %}
+
+{% block content %}
+<section class="hero-section text-center text-white d-flex flex-column justify-content-center align-items-center">
+  <div class="hero-content position-relative">
+    <h1>Explorez le monde magique de <span>{{ pays }}</span> ✨</h1>
+    <p>Bienvenue, <strong>{{ profil }}</strong> ! Découvrez les attractions les plus aimées de votre destination.</p>
+    <a href="{% url 'recherche' %}" class="btn btn-warning mt-2">🔍 Aller sur la page de Recherche</a>
+  </div>
+</section>
+
+<div class="container py-5">
+
+  <!-- 🏆 Carrousel des attractions -->
+  <h3 class="fw-bold text-primary text-center mb-4">Top 10 attractions en {{ pays }}</h3>
+
+  {% if top_attractions %}
+  <div id="carouselTop" class="carousel slide mb-5" data-bs-ride="carousel">
+    <div class="carousel-inner rounded shadow">
+      {% for a in top_attractions %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <img src="{{ a.image }}" class="d-block w-100" style="height:400px;object-fit:cover;">
+        <div class="carousel-caption bg-dark bg-opacity-50 rounded">
+          <h5>{{ a.nom }}</h5>
+          <p>⭐ {{ a.note }} — ❤️ {{ a.likes }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselTop" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselTop" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+  {% endif %}
+
+  <!-- 🗺️ Carte -->
+  <h4 class="fw-bold text-center mb-3">📍 Carte des attractions</h4>
+  <div id="map" style="height:400px;" class="rounded shadow-sm mb-5"></div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var map = L.map('map').setView([46.6, 2.3], 5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    {% for a in top_attractions %}
+      {% if a.coordonnees_gps %}
+        var coords = "{{ a.coordonnees_gps }}".split(",");
+        if (coords.length === 2) {
+          L.marker([coords[0], coords[1]]).addTo(map)
+            .bindPopup("<b>{{ a.nom }}</b><br>{{ a.ville }}<br>⭐ {{ a.note }}");
+        }
+      {% endif %}
+    {% endfor %}
+  });
+  </script>
+
+  <!-- ❤️ Vos attractions sélectionnées -->
+  {% if selected_attractions %}
+  <h4 class="fw-bold text-center mb-3">💖 Vos attractions favorites</h4>
+  <div class="row justify-content-center">
+    {% for a in selected_attractions %}
+    <div class="col-md-3 mb-3">
+      <div class="card shadow-sm border-0">
+        <img src="{{ a.image }}" class="card-img-top" style="height:150px;object-fit:cover;">
+        <div class="card-body text-center">
+          <h6 class="fw-bold text-primary">{{ a.nom }}</h6>
+          <p class="small">⭐ {{ a.note }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

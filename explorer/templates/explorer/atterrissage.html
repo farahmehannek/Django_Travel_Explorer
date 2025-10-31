@@ -1,0 +1,112 @@
+{% extends "explorer/base.html" %}
+{% load static %}
+{% block title %}Choix du profil{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+  <h3 class="mb-3">Choisissez votre profil et un pays à explorer :</h3>
+
+  <form method="POST" class="bg-white p-4 rounded shadow-sm d-inline-block position-relative">
+    {% csrf_token %}
+    
+    <!-- 🔹 Choix du profil -->
+    <label for="profil" class="fw-bold">Profil :</label><br>
+    <select name="profil" id="profil" class="form-select text-center mb-3" required style="width:220px; margin:auto;">
+      <option value="">-- Sélectionnez --</option>
+      {% for p in profils %}
+        <option value="{{ p.nom }}">{{ p.nom }}</option>
+      {% endfor %}
+    </select>
+
+    <!-- 🔹 Champ de recherche pays/ville -->
+    <label for="pays" class="fw-bold">Pays ou ville :</label><br>
+    <input type="text" name="pays" id="pays" placeholder="Ex : France, Japon"
+           autocomplete="off" class="form-control text-center mb-2"
+           style="width:220px; margin:auto;" required>
+
+    <!-- 🔹 Suggestions dynamiques -->
+    <div id="suggestions"
+         class="shadow-sm border rounded bg-white text-start"
+         style="max-width:220px;margin:0 auto;position:absolute;z-index:10;"></div>
+
+    <button type="submit" class="btn btn-primary w-100 mt-3">🚀 Explorer</button>
+  </form>
+</div>
+
+<script>
+const inputPays = document.getElementById("pays");
+const suggestionsDiv = document.getElementById("suggestions");
+
+inputPays.addEventListener("input", async function() {
+  const query = this.value.trim();
+  if (query.length < 2) { 
+    suggestionsDiv.innerHTML = ""; 
+    return; 
+  }
+
+  try {
+    // 🔍 Requête vers Django
+    const res = await fetch(`/autocomplete/?q=${encodeURIComponent(query)}`);
+    const data = await res.json();
+
+    // 🔧 Formatage de la réponse (liste simple ou {data: [...]})
+    const results = Array.isArray(data) ? data : data.data || [];
+
+    suggestionsDiv.innerHTML = "";
+
+    if (results.length === 0) {
+      const noResult = document.createElement("div");
+      noResult.textContent = "Aucune correspondance trouvée";
+      noResult.className = "text-muted px-2 py-1";
+      suggestionsDiv.appendChild(noResult);
+      return;
+    }
+
+    // ✅ Affichage des suggestions uniques
+    const unique = [...new Set(results)];
+    unique.forEach(name => {
+      const displayName = typeof name === "string" ? name : name.name;
+      const div = document.createElement("div");
+      div.textContent = displayName;
+      div.className = "px-2 py-1 border-bottom";
+      div.style.cursor = "pointer";
+      div.addEventListener("click", () => {
+        inputPays.value = displayName;
+        suggestionsDiv.innerHTML = "";
+      });
+      div.addEventListener("mouseover", () => div.style.background = "#e9ecef");
+      div.addEventListener("mouseout", () => div.style.background = "white");
+      suggestionsDiv.appendChild(div);
+    });
+  } catch (error) {
+    console.error("❌ Erreur autocomplete :", error);
+
+    // 🧭 Fallback local si l’API ou Django échoue
+    const fallback = ["France", "Japon", "Italie", "Espagne", "Canada", "États-Unis", "Allemagne", "Maroc"];
+    const filtered = fallback.filter(v => v.toLowerCase().includes(query.toLowerCase()));
+
+    suggestionsDiv.innerHTML = "";
+    filtered.forEach(name => {
+      const div = document.createElement("div");
+      div.textContent = name;
+      div.className = "px-2 py-1 border-bottom";
+      div.style.cursor = "pointer";
+      div.addEventListener("click", () => {
+        inputPays.value = name;
+        suggestionsDiv.innerHTML = "";
+      });
+      div.addEventListener("mouseover", () => div.style.background = "#e9ecef");
+      div.addEventListener("mouseout", () => div.style.background = "white");
+      suggestionsDiv.appendChild(div);
+    });
+  }
+});
+
+// 👇 Fermer la liste si on clique ailleurs
+document.addEventListener("click", (event) => {
+  if (!suggestionsDiv.contains(event.target) && event.target !== inputPays) {
+    suggestionsDiv.innerHTML = "";
+  }
+});
+</script>
+{% endblock %}

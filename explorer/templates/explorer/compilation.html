@@ -1,0 +1,52 @@
+{% extends "explorer/base.html" %}
+{% load static %}
+{% block title %}Votre compilation{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="fw-bold text-primary mb-4 text-center">📋 Votre compilation</h2>
+
+  <!-- 🧾 En-tête -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <span class="fw-bold">💰 Budget total :</span> {{ total_budget }} €
+    </div>
+
+    <form method="get" class="d-flex">
+      <label class="me-2 fw-bold">Trier par :</label>
+      <select name="tri" class="form-select form-select-sm" onchange="this.form.submit()">
+        <option value="prix_asc" {% if tri == 'prix_asc' %}selected{% endif %}>Prix croissant</option>
+        <option value="prix_desc" {% if tri == 'prix_desc' %}selected{% endif %}>Prix décroissant</option>
+        <option value="distance" {% if tri == 'distance' %}selected{% endif %}>Itinéraire optimal (distance)</option>
+      </select>
+    </form>
+  </div>
+
+  <!-- 🎢 Liste des attractions -->
+  {% if attractions %}
+    <div class="row">
+      {% for a in attractions %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm border-0">
+          <img src="{{ a.image|default:'https://via.placeholder.com/400x250' }}" 
+               class="card-img-top" 
+               style="height:200px;object-fit:cover;">
+          <div class="card-body">
+            <h5 class="fw-bold text-primary">{{ a.nom }}</h5>
+            <p>💰 {{ a.prix }} € — ⭐ {{ a.note }}</p>
+            <p class="text-muted small">{{ a.ville }}</p>
+
+            <form method="post" action="{% url 'remove_from_compilation' a.id %}">
+              {% csrf_token %}
+              <button class="btn btn-outline-danger btn-sm w-100">❌ Supprimer</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-center text-muted mt-4">Aucune attraction dans votre compilation.</p>
+  {% endif %}
+</div>
+{% endblock %}

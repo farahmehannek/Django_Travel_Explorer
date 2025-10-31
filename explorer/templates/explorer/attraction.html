@@ -1,0 +1,46 @@
+{% extends "explorer/base.html" %}
+{% load static %}
+{% block title %}{{ a.nom }} - Détails{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow border-0">
+    <img src="{{ a.image }}" class="card-img-top" style="height:350px;object-fit:cover;">
+    <div class="card-body">
+      <h3 class="fw-bold text-primary">{{ a.nom }}</h3>
+      <p>{{ a.description|default:"Aucune description disponible." }}</p>
+
+      <ul class="list-group list-group-flush mb-3">
+        <li class="list-group-item"><strong>Ville :</strong> {{ a.ville }}</li>
+        <li class="list-group-item"><strong>Catégorie :</strong> {{ a.categorie }}</li>
+        <li class="list-group-item"><strong>Prix :</strong> {{ a.prix }} €</li>
+        <li class="list-group-item"><strong>Note :</strong> ⭐ {{ a.note }}</li>
+        <li class="list-group-item"><strong>Reviews :</strong> {{ a.nb_reviews }}</li>
+        <li class="list-group-item"><strong>Coordonnées :</strong> {{ a.coordonnees_contact|default:"N/A" }}</li>
+        <li class="list-group-item"><strong>Horaires :</strong> {{ a.horaires|default:"Non spécifiés" }}</li>
+      </ul>
+
+      <a href="{{ a.tripadvisor_url }}" class="btn btn-primary" target="_blank">🌐 Voir sur TripAdvisor</a>
+      <a href="{% url 'add_to_compilation' a.id %}" class="btn btn-success">➕ Ajouter à la compilation</a>
+    </div>
+  </div>
+
+  <!-- Suggestions -->
+  {% if suggestions %}
+  <h4 class="mt-5 text-primary fw-bold">🎯 Attractions similaires à {{ a.ville }}</h4>
+  <div class="row">
+    {% for s in suggestions %}
+    <div class="col-md-3 mb-3">
+      <div class="card border-0 shadow-sm">
+        <img src="{{ s.image }}" class="card-img-top" style="height:120px;object-fit:cover;">
+        <div class="card-body text-center">
+          <h6>{{ s.nom }}</h6>
+          <a href="{% url 'attraction' s.id %}" class="btn btn-outline-primary btn-sm">Voir</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

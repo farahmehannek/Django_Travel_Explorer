@@ -1,0 +1,83 @@
+{% extends "explorer/base.html" %}
+{% load static %}
+{% block title %}Recherche - {{ pays }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="fw-bold text-primary text-center mb-4">
+    🔎 Rechercher des attractions à {{ capitale }}
+  </h2>
+
+  <!-- 🔽 Formulaire de filtres -->
+  <form method="get" class="row g-3 mb-4 p-3 bg-white rounded shadow-sm">
+    <div class="col-md-3">
+      <label for="ville" class="form-label fw-bold">Ville</label>
+      <select name="ville" class="form-select">
+        <option value="">Toutes</option>
+        {% for v in villes %}
+          <option value="{{ v }}" {% if request.GET.ville == v %}selected{% endif %}>{{ v }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label for="categorie" class="form-label fw-bold">Catégorie</label>
+      <select name="categorie" class="form-select">
+        <option value="">Toutes</option>
+        {% for c in categories %}
+          <option value="{{ c }}" {% if request.GET.categorie == c %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label for="note_min" class="form-label fw-bold">Note min</label>
+      <input type="number" step="0.1" name="note_min" value="{{ request.GET.note_min }}" class="form-control">
+    </div>
+
+    <div class="col-md-2">
+      <label for="prix_max" class="form-label fw-bold">Prix max (€)</label>
+      <input type="number" name="prix_max" value="{{ request.GET.prix_max }}" class="form-control">
+    </div>
+
+    <div class="col-md-2">
+      <label for="reviews_min" class="form-label fw-bold">Avis min</label>
+      <input type="number" name="reviews_min" value="{{ request.GET.reviews_min }}" class="form-control">
+    </div>
+
+    <div class="col-md-2">
+      <label for="photos_min" class="form-label fw-bold">Photos min</label>
+      <input type="number" name="photos_min" value="{{ request.GET.photos_min }}" class="form-control">
+    </div>
+
+    <div class="col-12 text-center mt-3">
+      <button type="submit" class="btn btn-primary">🔎 Filtrer</button>
+      <a href="{% url 'accueil' %}" class="btn btn-outline-secondary">↩️ Réinitialiser</a>
+    </div>
+  </form>
+
+  <!-- 🗂️ Liste des résultats -->
+  {% if page_obj %}
+  <div class="row">
+    {% for a in page_obj %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm border-0">
+        <img src="{{ a.image|default:'https://via.placeholder.com/400x250' }}"
+             class="card-img-top"
+             style="height:200px;object-fit:cover;">
+        <div class="card-body">
+          <h5 class="card-title text-primary fw-bold">{{ a.nom }}</h5>
+          <p>⭐ {{ a.note }} — 💰 {{ a.prix }}€</p>
+          <p class="text-muted">{{ a.ville }}</p>
+          <div class="d-flex justify-content-between">
+            <a href="{% url 'attraction' a.id %}" class="btn btn-outline-primary btn-sm">📖 Détails</a>
+            <a href="{% url 'add_to_compilation' a.id %}" class="btn btn-success btn-sm">➕ Ajouter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
